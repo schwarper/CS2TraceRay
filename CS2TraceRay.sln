@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35913.81
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CS2TraceRay", "CS2TraceRay\CS2TraceRay.csproj", "{A8FF093A-0119-1BA7-5D55-F96019F8F83A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CS2TraceRayExample", "CS2TraceRayExample\CS2TraceRayExample.csproj", "{F0503A36-BF25-DE6B-946B-B87F63A3BFFE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A8FF093A-0119-1BA7-5D55-F96019F8F83A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A8FF093A-0119-1BA7-5D55-F96019F8F83A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A8FF093A-0119-1BA7-5D55-F96019F8F83A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A8FF093A-0119-1BA7-5D55-F96019F8F83A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F0503A36-BF25-DE6B-946B-B87F63A3BFFE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F0503A36-BF25-DE6B-946B-B87F63A3BFFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F0503A36-BF25-DE6B-946B-B87F63A3BFFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F0503A36-BF25-DE6B-946B-B87F63A3BFFE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {513DEE4B-CB40-46A6-91AD-AEFFD5605972}
+	EndGlobalSection
+EndGlobal

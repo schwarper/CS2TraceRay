@@ -1,0 +1,7 @@
+# Ignore bin and obj directories
+.vs/
+**/obj
+**/bin
+
+# Ignore BuildOutput
+BuildOutput/

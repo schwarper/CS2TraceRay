@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="CounterStrikeSharp.API" Version="1.0.316" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\CS2TraceRay\CS2TraceRay.csproj" />
+	</ItemGroup>
+</Project>
