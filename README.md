@@ -7,6 +7,10 @@ Discord nickname: schwarper
 
 Discord link : Discord server
 
+# Nuget
+[![NuGet Badge](https://img.shields.io/nuget/v/CS2TraceRay)](https://www.nuget.org/packages/CS2TraceRay)
+[![NuGet-Badge](https://img.shields.io/nuget/dt/CS2TraceRay)](https://www.nuget.org/packages/CS2TraceRay)
+
 # Example
 [TraceRay Example](https://github.com/schwarper/CS2TraceRay/blob/main/CS2TraceRayExample/CS2TraceRayExample.cs)
 ```csharp
