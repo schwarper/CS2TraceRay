@@ -1,101 +1,128 @@
-﻿using CounterStrikeSharp.API;
-using CounterStrikeSharp.API.Core;
+﻿using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Core.Attributes.Registration;
 using CounterStrikeSharp.API.Modules.Commands;
-using CounterStrikeSharp.API.Modules.Utils;
 using CS2TraceRay.Class;
 using CS2TraceRay.Enum;
 
 namespace CS2TraceRayExample;
 
-public class Test : BasePlugin
+public class TraceRayExamplePlugin : BasePlugin
 {
-    public override string ModuleName => "TraceRay Example";
-    public override string ModuleVersion => "CS2TraceRay";
+    public override string ModuleName => "TraceRay Example Plugin";
+    public override string ModuleVersion => "1.0.0";
     public override string ModuleAuthor => "schwarper";
+    public override string ModuleDescription => "Demonstrates CS2TraceRay functionality with practical examples";
 
-    [ConsoleCommand("css_test_ground")]
-    public void OnTestGround(CCSPlayerController? player, CommandInfo _)
+    [ConsoleCommand("css_test_trace")]
+    public void OnCommandTestTrace(CCSPlayerController? player, CommandInfo info)
     {
         if (player == null)
             return;
 
-        float groundDistance = GetGroundDistance(player);
-        Server.PrintToChatAll($"Ground distance => {groundDistance}");
-    }
-
-    [ConsoleCommand("css_test_player")]
-    public void OnTestPlayer(CCSPlayerController? player, CommandInfo _)
-    {
-        if (player == null)
-            return;
-
-        CCSPlayerController? target = GetPlayer(player);
-        if (target == null)
+        CGameTrace? _trace = player.GetGameTraceByEyePosition(TraceMask.MaskAll, Contents.NoDraw, player);
+        if (_trace == null)
         {
-            Server.PrintToChatAll($"Target cannot be found.");
+            player.PrintToChat("Trace failed - no valid trace results");
             return;
         }
 
-        Server.PrintToChatAll($"Player => {target.PlayerName}");
+        CEntityInstance entityInstance = new(_trace.Value.HitEntity);
+
+        if (string.IsNullOrEmpty(entityInstance.DesignerName))
+        {
+            player.PrintToChat("Trace failed - no valid entity results");
+            return;
+        }
+
+        player.PrintToChat($"Entity designername => {entityInstance.DesignerName}");
     }
 
-    [ConsoleCommand("css_test_weapon")]
-    public void OnTestWeapon(CCSPlayerController? player, CommandInfo _)
+    [ConsoleCommand("css_trace_ground", "Measures distance to ground below player")]
+    public void OnCommandTraceGround(CCSPlayerController? player, CommandInfo info)
     {
         if (player == null)
             return;
 
-        CBasePlayerWeapon? target = GetWeapon(player);
-        if (target == null)
+        float groundDistance = player.GetGroundDistance();
+        player.PrintToChat($"Ground distance: {groundDistance:F2}");
+    }
+
+    [ConsoleCommand("css_trace_player", "Traces from player's eyes to detect other players")]
+    public void OnTracePlayerCommand(CCSPlayerController? player, CommandInfo command)
+    {
+        if (player == null) return;
+
+        CGameTrace? trace = player.GetGameTraceByEyePosition(
+            TraceMask.MaskShot,
+            Contents.Player,
+            player
+        );
+
+        if (!trace.HasValue)
         {
-            Server.PrintToChatAll($"Weapon cannot be found.");
+            player.PrintToChat("Trace failed - no valid trace results");
             return;
         }
 
-        Server.PrintToChatAll($"Weapon => {target.DesignerName}");
+        if (!trace.Value.HitPlayer(out CCSPlayerController? target) || target == null)
+        {
+            player.PrintToChat("No player detected in trace");
+            return;
+        }
+
+        player.PrintToChat($"Detected player: {target.PlayerName} (Distance: {trace.Value.Distance():F2})");
     }
 
-    private static float GetGroundDistance(CCSPlayerController player)
+    [ConsoleCommand("css_trace_weapon", "Detects weapons in player's line of sight")]
+    public void OnTraceWeaponCommand(CCSPlayerController? player, CommandInfo command)
     {
-        if (player.PlayerPawn.Value is not { } playerPawn ||
-            playerPawn.GroundEntity.IsValid is true ||
-            playerPawn.AbsOrigin is not { } absOrigin)
-            return 0.0f;
+        if (player == null) return;
 
-        CGameTrace _trace = TraceRay.TraceShape(absOrigin, new QAngle(90, 0, 0), TraceMask.MaskAll, Contents.Sky, 0);
-        return _trace.Distance;
+        CGameTrace? trace = player.GetGameTraceByEyePosition(
+            TraceMask.MaskShot,
+            Contents.CarriedWeapon,
+            player
+        );
+
+        if (!trace.HasValue)
+        {
+            player.PrintToChat("Trace failed - no valid trace results");
+            return;
+        }
+
+        if (!trace.Value.HitWeapon(out CBasePlayerWeapon? weapon) || weapon == null)
+        {
+            player.PrintToChat("No weapon detected in trace");
+            return;
+        }
+
+        player.PrintToChat($"Detected weapon: {weapon.DesignerName} (Distance: {trace.Value.Distance():F2})");
     }
 
-    private static CCSPlayerController? GetPlayer(CCSPlayerController player)
+    [ConsoleCommand("css_trace_c4", "Detects planted C4 in player's line of sight")]
+    public void OnTraceC4Command(CCSPlayerController? player, CommandInfo command)
     {
-        if (player.PlayerPawn.Value is not { } playerPawn)
-            return null;
+        if (player == null)
+            return;
 
-        Vector eyePos = GetEyePosition(player);
-        QAngle eyeAngles = playerPawn.EyeAngles;
-        CGameTrace _trace = TraceRay.TraceShape(eyePos, eyeAngles, TraceMask.MaskShot, Contents.Player, player);
+        CGameTrace? trace = player.GetGameTraceByEyePosition(
+            TraceMask.MaskShot,
+            Contents.CarriedWeapon,
+            player
+        );
 
-        return _trace.HitPlayer(out CCSPlayerController? target) && target != null ? target : null;
-    }
+        if (!trace.HasValue)
+        {
+            player.PrintToChat("Trace failed - no valid trace results");
+            return;
+        }
 
-    private static CBasePlayerWeapon? GetWeapon(CCSPlayerController player)
-    {
-        if (player.PlayerPawn.Value is not { } playerPawn)
-            return null;
+        if (!trace.Value.HitPlantedC4(out CPlantedC4? c4) || c4 == null)
+        {
+            player.PrintToChat("No planted c4 detected in trace");
+            return;
+        }
 
-        Vector eyePos = GetEyePosition(player);
-        QAngle eyeAngles = playerPawn.EyeAngles;
-        CGameTrace _trace = TraceRay.TraceShape(eyePos, eyeAngles, TraceMask.MaskShot, Contents.CarriedWeapon, player);
-
-        return _trace.HitWeapon(out CBasePlayerWeapon? weapon) && weapon != null ? weapon : null;
-    }
-
-    public static Vector GetEyePosition(CCSPlayerController player)
-    {
-        Vector absorigin = player.PlayerPawn.Value!.AbsOrigin!;
-        CPlayer_CameraServices camera = player.PlayerPawn.Value!.CameraServices!;
-
-        return new Vector(absorigin.X, absorigin.Y, absorigin.Z + camera.OldPlayerViewOffsetZ);
+        player.PrintToChat($"Detected Planted C4 at distance: {trace.Value.Distance():F2}");
     }
 }
