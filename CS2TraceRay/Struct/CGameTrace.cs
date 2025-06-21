@@ -2,7 +2,7 @@
 using System.Numerics;
 using System.Runtime.InteropServices;
 
-namespace CS2TraceRay.Class;
+namespace CS2TraceRay.Struct;
 
 /// <summary>
 /// Represents the results of a game trace operation, containing information about what was hit.

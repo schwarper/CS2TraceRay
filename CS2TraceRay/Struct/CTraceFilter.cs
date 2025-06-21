@@ -1,14 +1,11 @@
-﻿using CounterStrikeSharp.API.Core;
-using CounterStrikeSharp.API.Modules.Memory;
-using CS2TraceRay.Class;
-using System;
+﻿using System;
 using System.Runtime.InteropServices;
 
-namespace CS2TraceRay.Class;
+namespace CS2TraceRay.Struct;
 
 /// <summary>
 /// Represents a filter used during ray tracing operations to determine which entities should be included or excluded from the trace.
-/// This structure closely reflects the Source 2 engine's trace filter system.
+/// This structure closely reflects the trace filter system of the Source 2 engine.
 /// </summary>
 [StructLayout(LayoutKind.Explicit, Size = 72)]
 public unsafe struct CTraceFilter

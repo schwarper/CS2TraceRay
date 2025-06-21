@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace CS2TraceRay.Class;
+namespace CS2TraceRay.Struct;
 
 /// <summary>
 /// Represents trace hitbox information including hit group and hitbox ID.

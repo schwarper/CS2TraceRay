@@ -1,7 +1,6 @@
 ﻿using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Core.Attributes.Registration;
 using CounterStrikeSharp.API.Modules.Commands;
-using CounterStrikeSharp.API.Modules.Utils;
 using CS2TraceRay.Class;
 using CS2TraceRay.Enum;
 using CS2TraceRay.Struct;
@@ -135,15 +134,14 @@ public class TraceRayExamplePlugin : BasePlugin
         if (player?.PlayerPawn?.Value is not { } pawn)
             return;
 
-        var end = pawn.AbsOrigin!;
-        var angle = pawn.AbsRotation!;
+        var origin = pawn.AbsOrigin!;
 
         Ray* ray = null;
         var filter = new CTraceFilter
         {
         };
 
-        CGameTrace trace = TraceRay.TraceHull(angle, end, filter, ref ray);
+        CGameTrace trace = TraceRay.TraceHull(origin, origin, filter, ref ray);
         //...
     }
     */

@@ -1,7 +1,8 @@
-﻿using CounterStrikeSharp.API.Core;
+﻿using System;
+using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Modules.Utils;
 using CS2TraceRay.Enum;
-using System;
+using CS2TraceRay.Struct;
 using Vector = CounterStrikeSharp.API.Modules.Utils.Vector;
 
 namespace CS2TraceRay.Class;
@@ -222,209 +223,209 @@ public static partial class TraceRay
     /// <summary>
     /// Performs a trace from origin to end with specified mask and content flags
     /// </summary>
-    public static CGameTrace TraceShape(Vector origin, Vector end, TraceMask mask, ulong content, IntPtr skip)
+    public static CGameTrace TraceShape(Vector start, Vector end, TraceMask mask, ulong content, IntPtr skip)
     {
-        return TraceShape(origin, end, (ulong)mask, content, skip);
+        return TraceShape(start, end, (ulong)mask, content, skip);
     }
 
     /// <summary>
     /// Performs a trace from origin to end with raw mask and content flags
     /// </summary>
-    public static CGameTrace TraceShape(Vector origin, Vector end, ulong mask, Contents content, IntPtr skip)
+    public static CGameTrace TraceShape(Vector start, Vector end, ulong mask, Contents content, IntPtr skip)
     {
-        return TraceShape(origin, end, mask, (ulong)content, skip);
+        return TraceShape(start, end, mask, (ulong)content, skip);
     }
 
     /// <summary>
     /// Performs a trace from origin to end with specified mask and content flags
     /// </summary>
-    public static CGameTrace TraceShape(Vector origin, Vector end, TraceMask mask, Contents content, IntPtr skip)
+    public static CGameTrace TraceShape(Vector start, Vector end, TraceMask mask, Contents content, IntPtr skip)
     {
-        return TraceShape(origin, end, (ulong)mask, (ulong)content, skip);
+        return TraceShape(start, end, (ulong)mask, (ulong)content, skip);
     }
 
     /// <summary>
     /// Performs a trace from origin to end with specified mask and raw content value
     /// </summary>
-    public static CGameTrace TraceShape(Vector origin, Vector end, Contents mask, ulong content, IntPtr skip)
+    public static CGameTrace TraceShape(Vector start, Vector end, Contents mask, ulong content, IntPtr skip)
     {
-        return TraceShape(origin, end, (ulong)mask, content, skip);
+        return TraceShape(start, end, (ulong)mask, content, skip);
     }
 
     /// <summary>
     /// Performs a trace from origin to end with specified mask and content flags
     /// </summary>
-    public static CGameTrace TraceShape(Vector origin, Vector end, Contents mask, Contents content, IntPtr skip)
+    public static CGameTrace TraceShape(Vector start, Vector end, Contents mask, Contents content, IntPtr skip)
     {
-        return TraceShape(origin, end, (ulong)mask, (ulong)content, skip);
+        return TraceShape(start, end, (ulong)mask, (ulong)content, skip);
     }
 
     /// <summary>
     /// Performs a trace from origin to end with specified content flags
     /// </summary>
-    public static CGameTrace TraceShape(Vector origin, Vector end, Contents content, IntPtr skip)
+    public static CGameTrace TraceShape(Vector start, Vector end, Contents content, IntPtr skip)
     {
-        return TraceShape(origin, end, (ulong)content, (ulong)content, skip);
+        return TraceShape(start, end, (ulong)content, (ulong)content, skip);
     }
 
     /// <summary>
     /// Performs a trace from origin to end with specified mask flags
     /// </summary>
-    public static CGameTrace TraceShape(Vector origin, Vector end, TraceMask mask, IntPtr skip)
+    public static CGameTrace TraceShape(Vector start, Vector end, TraceMask mask, IntPtr skip)
     {
-        return TraceShape(origin, end, (ulong)mask, (ulong)mask, skip);
+        return TraceShape(start, end, (ulong)mask, (ulong)mask, skip);
     }
 
     /// <summary>
     /// Performs a trace from origin to end with raw mask value
     /// </summary>
-    public static CGameTrace TraceShape(Vector origin, Vector end, ulong mask, IntPtr skip)
+    public static CGameTrace TraceShape(Vector start, Vector end, ulong mask, IntPtr skip)
     {
-        return TraceShape(origin, end, mask, mask, skip);
+        return TraceShape(start, end, mask, mask, skip);
     }
 
     /// <summary>
     /// Performs a trace from origin to end with specified mask and content flags, skipping a player controller
     /// </summary>
-    public static CGameTrace TraceShape(Vector origin, Vector end, TraceMask mask, Contents content, CCSPlayerController skip)
+    public static CGameTrace TraceShape(Vector start, Vector end, TraceMask mask, Contents content, CCSPlayerController skip)
     {
-        return TraceShape(origin, end, (ulong)mask, (ulong)content, GetSafeSkipHandle(skip));
+        return TraceShape(start, end, (ulong)mask, (ulong)content, GetSafeSkipHandle(skip));
     }
 
     /// <summary>
     /// Performs a trace from origin to end with specified content flags, skipping a player controller
     /// </summary>
-    public static CGameTrace TraceShape(Vector origin, Vector end, Contents content, CCSPlayerController skip)
+    public static CGameTrace TraceShape(Vector start, Vector end, Contents content, CCSPlayerController skip)
     {
-        return TraceShape(origin, end, (ulong)content, (ulong)content, GetSafeSkipHandle(skip));
+        return TraceShape(start, end, (ulong)content, (ulong)content, GetSafeSkipHandle(skip));
     }
 
     /// <summary>
     /// Performs a trace from origin to end with specified mask and raw content value, skipping a player controller
     /// </summary>
-    public static CGameTrace TraceShape(Vector origin, Vector end, TraceMask mask, ulong content, CCSPlayerController skip)
+    public static CGameTrace TraceShape(Vector start, Vector end, TraceMask mask, ulong content, CCSPlayerController skip)
     {
-        return TraceShape(origin, end, (ulong)mask, content, GetSafeSkipHandle(skip));
+        return TraceShape(start, end, (ulong)mask, content, GetSafeSkipHandle(skip));
     }
 
     /// <summary>
     /// Performs a trace from origin to end with raw mask and content flags, skipping a player controller
     /// </summary>
-    public static CGameTrace TraceShape(Vector origin, Vector end, ulong mask, Contents content, CCSPlayerController skip)
+    public static CGameTrace TraceShape(Vector start, Vector end, ulong mask, Contents content, CCSPlayerController skip)
     {
-        return TraceShape(origin, end, mask, (ulong)content, GetSafeSkipHandle(skip));
+        return TraceShape(start, end, mask, (ulong)content, GetSafeSkipHandle(skip));
     }
 
     /// <summary>
     /// Performs a trace from origin to end with specified mask and raw content value, skipping a player controller
     /// </summary>
-    public static CGameTrace TraceShape(Vector origin, Vector end, Contents mask, ulong content, CCSPlayerController skip)
+    public static CGameTrace TraceShape(Vector start, Vector end, Contents mask, ulong content, CCSPlayerController skip)
     {
-        return TraceShape(origin, end, (ulong)mask, content, GetSafeSkipHandle(skip));
+        return TraceShape(start, end, (ulong)mask, content, GetSafeSkipHandle(skip));
     }
 
     /// <summary>
     /// Performs a trace from origin to end with raw mask and content values, skipping a player controller
     /// </summary>
-    public static CGameTrace TraceShape(Vector origin, Vector end, ulong mask, ulong content, CCSPlayerController skip)
+    public static CGameTrace TraceShape(Vector start, Vector end, ulong mask, ulong content, CCSPlayerController skip)
     {
-        return TraceShape(origin, end, mask, content, GetSafeSkipHandle(skip));
+        return TraceShape(start, end, mask, content, GetSafeSkipHandle(skip));
     }
 
     /// <summary>
     /// Performs a trace from origin to end with specified mask and content flags, skipping a player controller
     /// </summary>
-    public static CGameTrace TraceShape(Vector origin, Vector end, Contents mask, Contents content, CCSPlayerController skip)
+    public static CGameTrace TraceShape(Vector start, Vector end, Contents mask, Contents content, CCSPlayerController skip)
     {
-        return TraceShape(origin, end, (ulong)mask, (ulong)content, GetSafeSkipHandle(skip));
+        return TraceShape(start, end, (ulong)mask, (ulong)content, GetSafeSkipHandle(skip));
     }
 
     /// <summary>
     /// Performs a trace from origin to end with specified mask flags, skipping a player controller
     /// </summary>
-    public static CGameTrace TraceShape(Vector origin, Vector end, TraceMask mask, CCSPlayerController skip)
+    public static CGameTrace TraceShape(Vector start, Vector end, TraceMask mask, CCSPlayerController skip)
     {
-        return TraceShape(origin, end, (ulong)mask, (ulong)mask, skip.Handle);
+        return TraceShape(start, end, (ulong)mask, (ulong)mask, skip.Handle);
     }
 
     /// <summary>
     /// Performs a trace from origin to end with raw mask value, skipping a player controller
     /// </summary>
-    public static CGameTrace TraceShape(Vector origin, Vector end, ulong mask, CCSPlayerController skip)
+    public static CGameTrace TraceShape(Vector start, Vector end, ulong mask, CCSPlayerController skip)
     {
-        return TraceShape(origin, end, mask, mask, GetSafeSkipHandle(skip));
+        return TraceShape(start, end, mask, mask, GetSafeSkipHandle(skip));
     }
 
     /// <summary>
     /// Performs a trace from origin to end with specified mask and content flags, skipping a player pawn
     /// </summary>
-    public static CGameTrace TraceShape(Vector origin, Vector end, TraceMask mask, Contents content, CCSPlayerPawn skip)
+    public static CGameTrace TraceShape(Vector start, Vector end, TraceMask mask, Contents content, CCSPlayerPawn skip)
     {
-        return TraceShape(origin, end, (ulong)mask, (ulong)content, skip.Handle);
+        return TraceShape(start, end, (ulong)mask, (ulong)content, skip.Handle);
     }
 
     /// <summary>
     /// Performs a trace from origin to end with specified content flags, skipping a player pawn
     /// </summary>
-    public static CGameTrace TraceShape(Vector origin, Vector end, Contents content, CCSPlayerPawn skip)
+    public static CGameTrace TraceShape(Vector start, Vector end, Contents content, CCSPlayerPawn skip)
     {
-        return TraceShape(origin, end, (ulong)content, (ulong)content, skip.Handle);
+        return TraceShape(start, end, (ulong)content, (ulong)content, skip.Handle);
     }
 
     /// <summary>
     /// Performs a trace from origin to end with specified mask and raw content value, skipping a player pawn
     /// </summary>
-    public static CGameTrace TraceShape(Vector origin, Vector end, TraceMask mask, ulong content, CCSPlayerPawn skip)
+    public static CGameTrace TraceShape(Vector start, Vector end, TraceMask mask, ulong content, CCSPlayerPawn skip)
     {
-        return TraceShape(origin, end, (ulong)mask, content, skip.Handle);
+        return TraceShape(start, end, (ulong)mask, content, skip.Handle);
     }
 
     /// <summary>
     /// Performs a trace from origin to end with raw mask and content flags, skipping a player pawn
     /// </summary>
-    public static CGameTrace TraceShape(Vector origin, Vector end, ulong mask, Contents content, CCSPlayerPawn skip)
+    public static CGameTrace TraceShape(Vector start, Vector end, ulong mask, Contents content, CCSPlayerPawn skip)
     {
-        return TraceShape(origin, end, mask, (ulong)content, skip.Handle);
+        return TraceShape(start, end, mask, (ulong)content, skip.Handle);
     }
 
     /// <summary>
     /// Performs a trace from origin to end with specified mask and raw content value, skipping a player pawn
     /// </summary>
-    public static CGameTrace TraceShape(Vector origin, Vector end, Contents mask, ulong content, CCSPlayerPawn skip)
+    public static CGameTrace TraceShape(Vector start, Vector end, Contents mask, ulong content, CCSPlayerPawn skip)
     {
-        return TraceShape(origin, end, (ulong)mask, content, skip.Handle);
+        return TraceShape(start, end, (ulong)mask, content, skip.Handle);
     }
 
     /// <summary>
     /// Performs a trace from origin to end with raw mask and content values, skipping a player pawn
     /// </summary>
-    public static CGameTrace TraceShape(Vector origin, Vector end, ulong mask, ulong content, CCSPlayerPawn skip)
+    public static CGameTrace TraceShape(Vector start, Vector end, ulong mask, ulong content, CCSPlayerPawn skip)
     {
-        return TraceShape(origin, end, mask, content, skip.Handle);
+        return TraceShape(start, end, mask, content, skip.Handle);
     }
 
     /// <summary>
     /// Performs a trace from origin to end with specified mask and content flags, skipping a player pawn
     /// </summary>
-    public static CGameTrace TraceShape(Vector origin, Vector end, Contents mask, Contents content, CCSPlayerPawn skip)
+    public static CGameTrace TraceShape(Vector start, Vector end, Contents mask, Contents content, CCSPlayerPawn skip)
     {
-        return TraceShape(origin, end, (ulong)mask, (ulong)content, skip.Handle);
+        return TraceShape(start, end, (ulong)mask, (ulong)content, skip.Handle);
     }
 
     /// <summary>
     /// Performs a trace from origin to end with specified mask flags, skipping a player pawn
     /// </summary>
-    public static CGameTrace TraceShape(Vector origin, Vector end, TraceMask mask, CCSPlayerPawn skip)
+    public static CGameTrace TraceShape(Vector start, Vector end, TraceMask mask, CCSPlayerPawn skip)
     {
-        return TraceShape(origin, end, (ulong)mask, (ulong)mask, skip.Handle);
+        return TraceShape(start, end, (ulong)mask, (ulong)mask, skip.Handle);
     }
 
     /// <summary>
     /// Performs a trace from origin to end with raw mask value, skipping a player pawn
     /// </summary>
-    public static CGameTrace TraceShape(Vector origin, Vector end, ulong mask, CCSPlayerPawn skip)
+    public static CGameTrace TraceShape(Vector start, Vector end, ulong mask, CCSPlayerPawn skip)
     {
-        return TraceShape(origin, end, mask, mask, skip.Handle);
+        return TraceShape(start, end, mask, mask, skip.Handle);
     }
 
     /// <summary>
@@ -438,9 +439,9 @@ public static partial class TraceRay
     /// <summary>
     /// Performs a trace from origin to end with specified mask (as Contents) and content (as TraceMask), skipping a player controller
     /// </summary>
-    public static CGameTrace TraceShape(Vector origin, Vector end, Contents mask, TraceMask content, CCSPlayerController skip)
+    public static CGameTrace TraceShape(Vector start, Vector end, Contents mask, TraceMask content, CCSPlayerController skip)
     {
-        return TraceShape(origin, end, (ulong)mask, (ulong)content, GetSafeSkipHandle(skip));
+        return TraceShape(start, end, (ulong)mask, (ulong)content, GetSafeSkipHandle(skip));
     }
 
     /// <summary>
@@ -486,41 +487,41 @@ public static partial class TraceRay
     /// <summary>
     /// Performs a trace from origin to end with specified mask and content flags (both as TraceMask)
     /// </summary>
-    public static CGameTrace TraceShape(Vector origin, Vector end, TraceMask mask, TraceMask content, IntPtr skip)
+    public static CGameTrace TraceShape(Vector start, Vector end, TraceMask mask, TraceMask content, IntPtr skip)
     {
-        return TraceShape(origin, end, (ulong)mask, (ulong)content, skip);
+        return TraceShape(start, end, (ulong)mask, (ulong)content, skip);
     }
 
     /// <summary>
     /// Performs a trace from origin to end with specified mask (as Contents) and content (as TraceMask)
     /// </summary>
-    public static CGameTrace TraceShape(Vector origin, Vector end, Contents mask, TraceMask content, IntPtr skip)
+    public static CGameTrace TraceShape(Vector start, Vector end, Contents mask, TraceMask content, IntPtr skip)
     {
-        return TraceShape(origin, end, (ulong)mask, (ulong)content, skip);
+        return TraceShape(start, end, (ulong)mask, (ulong)content, skip);
     }
 
     /// <summary>
     /// Performs a trace from origin to end with specified mask and content flags (both as TraceMask), skipping a player controller
     /// </summary>
-    public static CGameTrace TraceShape(Vector origin, Vector end, TraceMask mask, TraceMask content, CCSPlayerController skip)
+    public static CGameTrace TraceShape(Vector start, Vector end, TraceMask mask, TraceMask content, CCSPlayerController skip)
     {
-        return TraceShape(origin, end, (ulong)mask, (ulong)content, GetSafeSkipHandle(skip));
+        return TraceShape(start, end, (ulong)mask, (ulong)content, GetSafeSkipHandle(skip));
     }
 
     /// <summary>
     /// Performs a trace from origin to end with specified mask and content flags (both as TraceMask), skipping a player pawn
     /// </summary>
-    public static CGameTrace TraceShape(Vector origin, Vector end, TraceMask mask, TraceMask content, CCSPlayerPawn skip)
+    public static CGameTrace TraceShape(Vector start, Vector end, TraceMask mask, TraceMask content, CCSPlayerPawn skip)
     {
-        return TraceShape(origin, end, (ulong)mask, (ulong)content, skip.Handle);
+        return TraceShape(start, end, (ulong)mask, (ulong)content, skip.Handle);
     }
 
     /// <summary>
     /// Performs a trace from origin to end with specified mask (as Contents) and content (as TraceMask), skipping a player pawn
     /// </summary>
-    public static CGameTrace TraceShape(Vector origin, Vector end, Contents mask, TraceMask content, CCSPlayerPawn skip)
+    public static CGameTrace TraceShape(Vector start, Vector end, Contents mask, TraceMask content, CCSPlayerPawn skip)
     {
-        return TraceShape(origin, end, (ulong)mask, (ulong)content, skip.Handle);
+        return TraceShape(start, end, (ulong)mask, (ulong)content, skip.Handle);
     }
 
     private static IntPtr GetSafeSkipHandle(CCSPlayerController player)

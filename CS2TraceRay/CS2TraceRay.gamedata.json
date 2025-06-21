@@ -12,5 +12,12 @@
       "windows": "4C 8B DC 49 89 5B ? 49 89 6B ? 49 89 73 ? 57 41 56 41 57 48 81 EC ? ? ? ? 0F 57 C0",
       "linux": "48 B8 ? ? ? ? ? ? ? ? 55 48 89 E5 41 57 41 56 49 89 D6 41 55"
     }
+  },
+  "CTraceFilterVtable": {
+    "signatures": {
+      "library": "server",
+      "windows": "48 8D 05 ? ? ? ? 66 0F 7F 45 ? 48 89 45 ? 41 0F B6 F1",
+      "linux": "48 8D 05 ? ? ? ? F3 0F 11 95 ? ? ? ? F3 0F 11 85 ? ? ? ? 48 C7 85"
+    }
   }
 }

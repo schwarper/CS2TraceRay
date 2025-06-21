@@ -1,6 +1,6 @@
-﻿using System.Numerics;
+﻿using System;
+using System.Numerics;
 using System.Runtime.InteropServices;
-using System;
 
 namespace CS2TraceRay.Struct;
 

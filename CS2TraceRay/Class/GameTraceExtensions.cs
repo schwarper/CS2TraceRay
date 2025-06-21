@@ -1,7 +1,8 @@
-﻿using CounterStrikeSharp.API.Core;
-using CS2TraceRay.Enum;
-using System;
+﻿using System;
 using System.Numerics;
+using CounterStrikeSharp.API.Core;
+using CS2TraceRay.Enum;
+using CS2TraceRay.Struct;
 
 namespace CS2TraceRay.Class;
 
@@ -15,7 +16,7 @@ public static class GameTraceExtensions
     /// </summary>
     public static bool DidHit(this CGameTrace gameTrace)
     {
-        return gameTrace.Fraction < 1.0f && !gameTrace.AllSolid;
+        return gameTrace is { Fraction: < 1.0f, AllSolid: false };
     }
 
     /// <summary>

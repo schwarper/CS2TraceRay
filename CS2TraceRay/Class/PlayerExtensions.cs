@@ -1,7 +1,8 @@
-﻿using CounterStrikeSharp.API.Core;
+﻿using System;
+using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Modules.Utils;
 using CS2TraceRay.Enum;
-using System;
+using CS2TraceRay.Struct;
 
 namespace CS2TraceRay.Class;
 
@@ -16,7 +17,7 @@ public static class PlayerExtensions
     /// </summary>
     /// <param name="player">The player controller to trace from.</param>
     /// <param name="mask">The trace mask to use for collision detection.</param>
-    /// <param name="contents">The contents flags to filter the trace.</param>
+    /// <param name="contents">The content flags to filter the trace.</param>
     /// <param name="skipPlayer">Optional player whose pawn should be ignored in the trace.</param>
     /// <returns>A <see cref="CGameTrace"/> object containing the trace results, or null if the trace couldn't be performed.</returns>
     public static CGameTrace? GetGameTraceByEyePosition(this CCSPlayerController player, TraceMask mask, Contents contents, CCSPlayerController? skipPlayer)
