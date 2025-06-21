@@ -1,8 +1,10 @@
 ﻿using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Core.Attributes.Registration;
 using CounterStrikeSharp.API.Modules.Commands;
+using CounterStrikeSharp.API.Modules.Utils;
 using CS2TraceRay.Class;
 using CS2TraceRay.Enum;
+using CS2TraceRay.Struct;
 
 namespace CS2TraceRayExample;
 
@@ -125,4 +127,24 @@ public class TraceRayExamplePlugin : BasePlugin
 
         player.PrintToChat($"Detected Planted C4 at distance: {trace.Value.Distance():F2}");
     }
+
+    /*
+    [ConsoleCommand("css_tracehull_test")]
+    public unsafe void OnTraceHullTest(CCSPlayerController? player, CommandInfo command)
+    {
+        if (player?.PlayerPawn?.Value is not { } pawn)
+            return;
+
+        var end = pawn.AbsOrigin!;
+        var angle = pawn.AbsRotation!;
+
+        Ray* ray = null;
+        var filter = new CTraceFilter
+        {
+        };
+
+        CGameTrace trace = TraceRay.TraceHull(angle, end, filter, ref ray);
+        //...
+    }
+    */
 }

@@ -1,7 +1,10 @@
 ﻿using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Modules.Memory;
 using CounterStrikeSharp.API.Modules.Utils;
+using CS2TraceRay.Struct;
 using System;
+using System.Diagnostics;
+using System.Reflection.Metadata;
 using System.Runtime.InteropServices;
 
 namespace CS2TraceRay.Class;
@@ -11,9 +14,20 @@ namespace CS2TraceRay.Class;
 /// </summary>
 public static unsafe partial class TraceRay
 {
-    private static readonly IntPtr TraceFunc = NativeAPI.FindSignature(Addresses.ServerPath, GameData.GetSignature("TraceFunc"));
-    private static readonly IntPtr GameTraceManager = NativeAPI.FindSignature(Addresses.ServerPath, GameData.GetSignature("GameTraceManager"));
-    private static readonly TraceShapeDelegate _traceShape = Marshal.GetDelegateForFunctionPointer<TraceShapeDelegate>(TraceFunc);
+    private static readonly IntPtr TraceFunc;
+    private static readonly IntPtr CTraceFilterVtable;
+    private static readonly IntPtr GameTraceManager;
+    private static readonly TraceShapeDelegate _traceShape;
+    private static readonly TraceShapeRayFilterDelegate _traceShapeRayFilter;
+
+    static TraceRay()
+    {
+        TraceFunc = NativeAPI.FindSignature(Addresses.ServerPath, GameData.GetSignature("TraceFunc"));
+        CTraceFilterVtable = NativeAPI.FindSignature(Addresses.ServerPath, GameData.GetSignature("CTraceFilterVtable"));
+        GameTraceManager = NativeAPI.FindSignature(Addresses.ServerPath, GameData.GetSignature("GameTraceManager"));
+        _traceShape = Marshal.GetDelegateForFunctionPointer<TraceShapeDelegate>(TraceFunc);
+        _traceShapeRayFilter = Marshal.GetDelegateForFunctionPointer<TraceShapeRayFilterDelegate>(CTraceFilterVtable);
+    }
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     private delegate bool TraceShapeDelegate(
@@ -23,6 +37,16 @@ public static unsafe partial class TraceRay
         IntPtr skip,
         ulong mask,
         ulong content,
+        CGameTrace* pGameTrace
+    );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    private unsafe delegate bool TraceShapeRayFilterDelegate(
+        nint GameTraceManager,
+        Ray* trace,
+        nint vecStart,
+        nint vecEnd,
+        CTraceFilter* traceFilter,
         CGameTrace* pGameTrace
     );
 
@@ -59,6 +83,41 @@ public static unsafe partial class TraceRay
         IntPtr _gameTraceManagerAddress = Address.GetAbsoluteAddress(GameTraceManager, 3, 7);
 
         _traceShape(*(IntPtr*)_gameTraceManagerAddress, origin.Handle, end.Handle, skip, mask, content, _trace);
+
+        return *_trace;
+    }
+
+    /// <summary>
+    /// Performs a hull-based ray trace using the provided shape, direction, and filter information.
+    /// This method wraps the native _traceShapeRayFilter call, setting up necessary filter and trace data on the stack.
+    /// </summary>
+    /// <param name="angle">
+    /// The direction of the trace, represented as a QAngle (pitch, yaw, roll).
+    /// </param>
+    /// <param name="end">
+    /// The world-space end point of the trace.
+    /// </param>
+    /// <param name="filter">
+    /// The filter used to determine which entities or collisions should be excluded during the trace.
+    /// </param>
+    /// <param name="ray">
+    /// A pointer to the shape of the ray (e.g., line, sphere, hull, capsule, mesh) to be traced.
+    /// </param>
+    /// <returns>
+    /// Returns a <see cref="CGameTrace"/> structure containing the result of the trace operation, including hit data, entity, and surface details.
+    /// </returns>
+    public static CGameTrace TraceHull(QAngle angle, Vector end, CTraceFilter filter, ref Ray* ray)
+    {
+        IntPtr _vtable = Address.GetAbsoluteAddress(CTraceFilterVtable, 3, 7);
+        IntPtr _gameTraceManager = Address.GetAbsoluteAddress(GameTraceManager, 3, 7);
+        
+        CGameTrace* _trace = stackalloc CGameTrace[1];
+        CTraceFilter* _filter = stackalloc CTraceFilter[1];
+
+        *_filter = filter;
+        _filter->Vtable = (void*)_vtable;
+
+        _traceShapeRayFilter(*(nint*)_gameTraceManager, ray, angle.Handle, end.Handle, _filter, _trace);
 
         return *_trace;
     }
