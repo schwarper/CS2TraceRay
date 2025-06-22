@@ -20,10 +20,11 @@ public static unsafe partial class TraceRay
     static TraceRay()
     {
         IntPtr traceFunc = NativeAPI.FindSignature(Addresses.ServerPath, GameData.GetSignature("TraceFunc"));
+        IntPtr traceShape = NativeAPI.FindSignature(Addresses.ServerPath, GameData.GetSignature("TraceShape"));
         CTraceFilterVtable = NativeAPI.FindSignature(Addresses.ServerPath, GameData.GetSignature("CTraceFilterVtable"));
         GameTraceManager = NativeAPI.FindSignature(Addresses.ServerPath, GameData.GetSignature("GameTraceManager"));
         _traceShape = Marshal.GetDelegateForFunctionPointer<TraceShapeDelegate>(traceFunc);
-        _traceShapeRayFilter = Marshal.GetDelegateForFunctionPointer<TraceShapeRayFilterDelegate>(CTraceFilterVtable);
+        _traceShapeRayFilter = Marshal.GetDelegateForFunctionPointer<TraceShapeRayFilterDelegate>(traceShape);
     }
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -95,7 +96,7 @@ public static unsafe partial class TraceRay
     /// <returns>
     /// Returns a <see cref="CGameTrace"/> structure containing the result of the trace operation, including hit data, entity, and surface details.
     /// </returns>
-    public static CGameTrace TraceHull(Vector start, Vector end, CTraceFilter filter, ref Ray* ray)
+    public static CGameTrace TraceHull(Vector start, Vector end, CTraceFilter filter, Ray ray)
     {
         CGameTrace* _trace = stackalloc CGameTrace[1];
         CTraceFilter* _filter = stackalloc CTraceFilter[1];
@@ -106,7 +107,7 @@ public static unsafe partial class TraceRay
         *_filter = filter;
         _filter->Vtable = (void*)_vtable;
 
-        _traceShapeRayFilter(*(nint*)_gameTraceManager, ray, start.Handle, end.Handle, _filter, _trace);
+        _traceShapeRayFilter(*(nint*)_gameTraceManager, &ray, start.Handle, end.Handle, _filter, _trace);
 
         return *_trace;
     }

@@ -58,7 +58,7 @@ public unsafe struct CTraceFilter
     /// <summary>
     /// Pointer to the virtual function table used internally by the engine.
     /// </summary>
-    [FieldOffset(0x00)] public void* Vtable;
+    [FieldOffset(0x00)] internal void* Vtable;
 
     /// <summary>
     /// Mask of interaction types to include in the trace.
