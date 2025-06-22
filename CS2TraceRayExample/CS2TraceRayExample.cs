@@ -1,8 +1,13 @@
-﻿using CounterStrikeSharp.API.Core;
+﻿using System.Numerics;
+using CounterStrikeSharp.API;
+using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Core.Attributes.Registration;
 using CounterStrikeSharp.API.Modules.Commands;
+using CounterStrikeSharp.API.Modules.Entities.Constants;
 using CS2TraceRay.Class;
 using CS2TraceRay.Enum;
+using CS2TraceRay.Struct;
+using Vector = CounterStrikeSharp.API.Modules.Utils.Vector;
 
 namespace CS2TraceRayExample;
 
@@ -124,5 +129,32 @@ public class TraceRayExamplePlugin : BasePlugin
         }
 
         player.PrintToChat($"Detected Planted C4 at distance: {trace.Value.Distance():F2}");
+    }
+
+    [ConsoleCommand("css_tracehull_test")]
+    public unsafe void OnTraceHullTest(CCSPlayerController? player, CommandInfo command)
+    {
+        if (player?.PlayerPawn.Value is not { } pawn)
+            return;
+
+        Vector origin = pawn.AbsOrigin!;
+        Ray ray = new Ray(new Vector3(-16, -16, -0), new Vector3(16, 16, 72));
+
+        CTraceFilter filter = new CTraceFilter(pawn.Index, pawn.Index)
+        {
+            m_nObjectSetMask = 0xf,
+            m_nCollisionGroup = (byte)CollisionGroup.COLLISION_GROUP_PLAYER_MOVEMENT,
+            m_nInteractsWith = pawn.GetInteractsWith(),
+            m_nInteractsExclude = 0,
+            m_nBits = 11,
+            m_bIterateEntities = true,
+            m_nInteractsAs = 0x40000
+        };
+
+        filter.m_nHierarchyIds[0] = pawn.GetHierarchyId();
+        filter.m_nHierarchyIds[1] = 0;
+        
+        CGameTrace trace = TraceRay.TraceHull(origin, new Vector(origin.X, origin.Y, origin.Z + 36.0f), filter, ray);
+        Server.PrintToChatAll($"Fraction is {trace.Fraction}");
     }
 }
