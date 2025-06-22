@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using CounterStrikeSharp.API;
 using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Core.Attributes.Registration;
 using CounterStrikeSharp.API.Modules.Commands;
@@ -143,17 +144,17 @@ public class TraceRayExamplePlugin : BasePlugin
         {
             m_nObjectSetMask = 0xf,
             m_nCollisionGroup = (byte)CollisionGroup.COLLISION_GROUP_PLAYER_MOVEMENT,
-            m_nInteractsWith = pawn.Collision.CollisionAttribute.InteractsWith,
+            m_nInteractsWith = pawn.GetInteractsWith(),
             m_nInteractsExclude = 0,
             m_nBits = 11,
             m_bIterateEntities = true,
             m_nInteractsAs = 0x40000
         };
 
-        filter.m_nHierarchyIds[0] = pawn.Collision.CollisionAttribute.HierarchyId;
+        filter.m_nHierarchyIds[0] = pawn.GetHierarchyId();
         filter.m_nHierarchyIds[1] = 0;
         
         CGameTrace trace = TraceRay.TraceHull(origin, new Vector(origin.X, origin.Y, origin.Z + 36.0f), filter, ray);
-        command.ReplyToCommand($"fraction={trace.Fraction}");
+        Server.PrintToChatAll($"Fraction is {trace.Fraction}");
     }
 }

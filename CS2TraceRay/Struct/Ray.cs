@@ -40,10 +40,7 @@ public struct Ray
     /// <summary>
     /// The active ray shape type, used to determine how the union should be interpreted.
     /// </summary>
-    /// <remarks>
-    /// Offset 64 may not be correct!!
-    /// </remarks>
-    [FieldOffset(64)] public RayType Type;
+    [FieldOffset(40)] public RayType Type;
 
     /// <summary>
     /// Initializes a ray as a simple line with no radius.
