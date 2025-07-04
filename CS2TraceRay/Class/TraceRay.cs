@@ -111,4 +111,17 @@ public static unsafe partial class TraceRay
 
         return *_trace;
     }
+    public static CGameTrace GetGameTraceByEyePosition(
+        CCSPlayerController player,
+        Vector destination,
+        ulong mask
+    )
+    {
+        var pawn = player.PlayerPawn?.Value;
+        if (pawn is null || pawn.AbsOrigin is null)
+            return new CGameTrace();
+
+        var start = pawn.AbsOrigin + new Vector(0, 0, 64);
+        return TraceShape(start, destination, mask, 0ul, pawn.Handle);
+    }
 }
