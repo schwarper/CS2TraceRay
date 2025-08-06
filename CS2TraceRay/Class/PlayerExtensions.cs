@@ -62,9 +62,9 @@ public static class PlayerExtensions
     /// <returns>A <see cref="Vector"/> representing the eye position, or null if the position couldn't be determined.</returns>
     public static Vector? GetEyePosition(this CCSPlayerPawn playerPawn)
     {
-        return playerPawn.AbsOrigin is not { } absOrigin || playerPawn.CameraServices is not { } cameraServices
+        return playerPawn.AbsOrigin is not { } absOrigin
             ? null
-            : new Vector(absOrigin.X, absOrigin.Y, absOrigin.Z + cameraServices.OldPlayerViewOffsetZ);
+            : new Vector(absOrigin.X, absOrigin.Y, absOrigin.Z + playerPawn.ViewOffset.Z);
     }
 
     /// <summary>
