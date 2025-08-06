@@ -111,4 +111,27 @@ public static unsafe partial class TraceRay
 
         return *_trace;
     }
+    /// <summary>
+    /// Performs a line trace (raycast) from the player's eye position to a specified destination, using the given trace mask.
+    /// </summary>
+    /// <param name="player">The player controller whose eye position is used as the trace start point.</param>
+    /// <param name="destination">The world-space destination position to trace towards.</param>
+    /// <param name="mask">Trace mask flags as a ulong, specifying which types of surfaces or entities to consider during the trace.</param>
+    /// <returns>
+    /// Returns a <see cref="CGameTrace"/> structure containing the result of the trace operation, including hit information such as the entity hit, surface details, and impact position.
+    /// If the player's pawn or its origin is unavailable, returns a default (empty) <see cref="CGameTrace"/>.
+    /// </returns>
+    public static CGameTrace GetGameTraceByEyePosition(
+        CCSPlayerController player,
+        Vector destination,
+        ulong mask
+    )
+    {
+        var pawn = player.PlayerPawn?.Value;
+        if (pawn is null || pawn.AbsOrigin is null)
+            return new CGameTrace();
+
+        var start = pawn.AbsOrigin + new Vector(0, 0, 64);
+        return TraceShape(start, destination, mask, 0ul, pawn.Handle);
+    }
 }
